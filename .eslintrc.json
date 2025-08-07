@@ -1,6 +1,25 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "standard", "plugin:tailwindcss/recommended", "prettier" ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "extends": [
+    "eslint:recommended",
+    "next/core-web-vitals",
+    "next/typescript",
+    "plugin:react/recommended",
+    "plugin:tailwindcss/recommended",
+    "plugin:prettier/recommended",
+    "standard"
+  ],
+  "plugins": ["react", "prettier"],
   "rules": {
+    "prettier/prettier": "error",
     "no-undef": "off"
   }
 }
