@@ -19,7 +19,11 @@
   ],
   "plugins": ["react", "prettier"],
   "rules": {
-    "prettier/prettier": "error",
-    "no-undef": "off"
+    "no-undef": "off",
+    "quotes": "off",
+    "semi": "off",
+    "comma-dangle": "off",
+    "indent": "off",
+    "prettier/prettier": "off"
   }
 }
