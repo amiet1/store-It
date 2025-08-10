@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: "The only storage solution you need",
 };
 
-export default function RootLayout ({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
