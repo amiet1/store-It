@@ -1,7 +1,5 @@
 "use client";
 
-// eslint-disable-next-line import/no-duplicates
-import React from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,8 +13,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
-// eslint-disable-next-line import/no-duplicates
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";

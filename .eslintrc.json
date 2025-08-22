@@ -24,6 +24,7 @@
     "semi": "off",
     "comma-dangle": "off",
     "indent": "off",
-    "prettier/prettier": "off"
+    "prettier/prettier": "error",
+    "react/react-in-jsx-scope": "off"
   }
 }
