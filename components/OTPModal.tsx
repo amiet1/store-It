@@ -32,24 +32,22 @@ const OtpModal = ({
   const [isOpen, setIsOpen] = useState(true);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setIsLoading(true);
-
-    console.log({ accountId, password });
+    setError("");
 
     try {
-      const sessionId = await verifySecret({ accountId, password });
-
-      console.log({ sessionId });
-
-      if (sessionId) router.push("/");
-    } catch (error) {
-      console.log("Failed to verify OTP", error);
+      await verifySecret({ accountId, password });
+      // Close modal (if you use state in parent)
+      // trigger UI refresh to load authenticated components
+      router.refresh();
+    } catch {
+      setError("OTP verification failed. Try again.");
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleResendOtp = async () => {
@@ -87,6 +85,10 @@ const OtpModal = ({
             <InputOTPSlot index={5} className="shad-otp-slot" />
           </InputOTPGroup>
         </InputOTP>
+
+        {error && (
+          <div className="text-red-500 text-center text-sm">{error}</div>
+        )}
 
         <AlertDialogFooter>
           <div className="flex w-full flex-col gap-4">

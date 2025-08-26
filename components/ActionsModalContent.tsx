@@ -56,7 +56,7 @@ export const ShareInput = ({ file, onInputChange, onRemove }: Props) => {
         <Input
           type="email"
           placeholder="Enter email address"
-          onChange={(e) => onInputChange(e.target.value.trim().split(","))}
+          onChange={(e) => onInputChange(e.target.value.trim().split(","))} // allows multiple emails
           className="share-input-field"
         />
         <div className="pt-4">

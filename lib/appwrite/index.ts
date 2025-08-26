@@ -12,16 +12,16 @@ export const createSessionClient = async () => {
 
   const session = (await cookies()).get("appwrite-session");
 
-  if (!session || !session.value) throw new Error("no session!");
+  if (!session?.value) {
+    return null;
+  }
 
   client.setSession(session.value);
 
   return {
-    // eslint-disable-next-line prettier/prettier
     get account () {
       return new Account(client);
     },
-    // eslint-disable-next-line prettier/prettier
     get databases () {
       return new Databases(client);
     },

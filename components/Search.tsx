@@ -46,9 +46,13 @@ const Search = () => {
     setOpen(false);
     setResults([]);
 
-    router.push(
-      `/${file.type === "video" || file.type === "audio" ? "media" : file.type + "s"}?query=${query}`,
-    );
+    let route;
+    if (file.type === "video" || file.type === "audio") {
+      route = "media";
+    } else {
+      route = file.type + "s";
+    }
+    router.push(`/${route}?query=${query}`);
   };
 
   return (
@@ -70,8 +74,7 @@ const Search = () => {
         {open && (
           // eslint-disable-next-line react/jsx-no-comment-textnodes
           <ul className="search-result">
-            {results.length > 0
-? (
+            {results.length > 0 &&
               results.map((file) => (
                 <li
                   className="flex items-center justify-between"
@@ -95,9 +98,8 @@ const Search = () => {
                     className="caption line-clamp-1 text-light-200"
                   />
                 </li>
-              ))
-            )
-: (
+              ))}
+            {results.length === 0 && (
               <p className="empty-result">No files found</p>
             )}
           </ul>

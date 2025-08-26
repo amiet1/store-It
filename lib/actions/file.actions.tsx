@@ -100,6 +100,7 @@ export const getFiles = async ({
 
   try {
     const currentUser = await getCurrentUser();
+    console.log("Current user:", currentUser);
 
     if (!currentUser) throw new Error("User not found");
 
@@ -114,6 +115,7 @@ export const getFiles = async ({
     console.log({ files });
     return parseStringify(files);
   } catch (error) {
+    console.error("Error in getFiles:", error);
     handleError(error, "Failed to get files");
   }
 };
@@ -189,14 +191,16 @@ export const deleteFile = async ({
     revalidatePath(path);
     return parseStringify({ status: "success" });
   } catch (error) {
-    handleError(error, "Failed to rename file");
+    handleError(error, "Failed to delete file");
   }
 };
 
 // ============================== TOTAL FILE SPACE USED
 export const getTotalSpaceUsed = async () => {
   try {
-    const { databases } = await createSessionClient();
+    const clientData = await createSessionClient();
+    if (!clientData) throw new Error("No session cookie found");
+    const { databases } = clientData;
     const currentUser = await getCurrentUser();
     if (!currentUser) throw new Error("User is not authenticated.");
 

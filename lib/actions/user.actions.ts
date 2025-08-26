@@ -26,11 +26,16 @@ const handleError = (error: unknown, message: string) => {
 };
 
 export const sendEmailOTP = async ({ email }: { email: string }) => {
-  const { account } = await createAdminClient();
+  const clientData = await createSessionClient(); // not destructring immediately checking on user first
+
+  if (!clientData) {
+    throw new Error("No session cookie found. User must be logged in.");
+  }
+
+  const { account } = clientData;
 
   try {
     const session = await account.createEmailToken(ID.unique(), email);
-
     return session.userId;
   } catch (error) {
     handleError(error, "Failed to send email OTP");
@@ -46,8 +51,14 @@ export const createAccount = async ({
 }) => {
   const existingUser = await getUserByEmail(email);
 
-  const accountId = await sendEmailOTP({ email });
-  if (!accountId) throw new Error("Failed to send an OTP");
+  // First create the actual Appwrite account
+  const { account } = await createAdminClient();
+  const appwriteAccount = await account.create(
+    ID.unique(),
+    email,
+    "", // password will be set later
+    fullName,
+  );
 
   if (!existingUser) {
     const { databases } = await createAdminClient();
@@ -60,12 +71,16 @@ export const createAccount = async ({
         fullName,
         email,
         avatar: avatarPlaceholderUrl,
-        accountId,
+        accountId: appwriteAccount.$id, // Store the REAL Appwrite account ID
       },
     );
   }
 
-  return parseStringify({ accountId });
+  // Send OTP for the newly created account
+  const otpId = await sendEmailOTP({ email });
+  if (!otpId) throw new Error("Failed to send an OTP");
+
+  return parseStringify({ accountId: appwriteAccount.$id });
 };
 
 export const verifySecret = async ({
@@ -95,8 +110,10 @@ export const verifySecret = async ({
 
 export const getCurrentUser = async () => {
   try {
-    const { databases, account } = await createSessionClient();
+    const clientData = await createSessionClient();
+    if (!clientData) return null; // or throw
 
+    const { databases, account } = clientData;
     const result = await account.get();
 
     const user = await databases.listDocuments(
@@ -114,7 +131,10 @@ export const getCurrentUser = async () => {
 };
 
 export const signOutUser = async () => {
-  const { account } = await createSessionClient();
+  const clientData = await createSessionClient();
+  if (!clientData) throw new Error("No session cookie found");
+
+  const { account } = clientData;
 
   try {
     await account.deleteSession("current");
