@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // node appwrite
 "use server";
 import { Account, Avatars, Client, Databases, Storage } from "node-appwrite";
@@ -16,10 +17,12 @@ export const createSessionClient = async () => {
   client.setSession(session.value);
 
   return {
-    get account() {
+    // eslint-disable-next-line prettier/prettier
+    get account () {
       return new Account(client);
     },
-    get databases() {
+    // eslint-disable-next-line prettier/prettier
+    get databases () {
       return new Databases(client);
     },
   };
@@ -33,16 +36,16 @@ export const createAdminClient = async () => {
     .setKey(appwriteConfig.secretKey);
 
   return {
-    get account() {
+    get account () {
       return new Account(client);
     },
-    get databases() {
+    get databases () {
       return new Databases(client);
     },
-    get storage() {
+    get storage () {
       return new Storage(client);
     },
-    get avatars() {
+    get avatars () {
       return new Avatars(client);
     },
   };

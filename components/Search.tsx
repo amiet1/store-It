@@ -68,8 +68,10 @@ const Search = () => {
         />
 
         {open && (
+          // eslint-disable-next-line react/jsx-no-comment-textnodes
           <ul className="search-result">
-            {results.length > 0 ? (
+            {results.length > 0
+? (
               results.map((file) => (
                 <li
                   className="flex items-center justify-between"
@@ -94,7 +96,8 @@ const Search = () => {
                   />
                 </li>
               ))
-            ) : (
+            )
+: (
               <p className="empty-result">No files found</p>
             )}
           </ul>

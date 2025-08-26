@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+
 import {
   Dialog,
   DialogContent,
@@ -170,7 +170,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                 }
               }}
             >
-              {actionItem.value === "download" ? (
+              {actionItem.value === "download" && (
                 <Link
                   href={constructDownloadUrl(file.bucketFileId)}
                   download={file.name}
@@ -184,7 +184,8 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                   />
                   {actionItem.label}
                 </Link>
-              ) : (
+              )}
+              {actionItem.value !== "download" && (
                 <div className="flex items-center gap-2">
                   <Image
                     src={actionItem.icon}

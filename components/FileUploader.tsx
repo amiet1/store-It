@@ -89,6 +89,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
           {files.map((file, index) => {
             const { type, extension } = getFileType(file.name);
 
+            // once we get the file type
             return (
               <li
                 key={`${file.name}-${index}`}

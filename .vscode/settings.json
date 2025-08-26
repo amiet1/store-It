@@ -9,5 +9,8 @@
     "typescript",
     "typescriptreact"
   ],
-  "prettier.requireConfig": true
+  "prettier.requireConfig": true,
+  "cSpell.words": [
+    "APPWRITE"
+  ]
 }
