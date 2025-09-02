@@ -14,8 +14,7 @@
     "next/typescript",
     "plugin:react/recommended",
     "plugin:tailwindcss/recommended",
-    "plugin:prettier/recommended",
-    "standard"
+    "plugin:prettier/recommended"
   ],
   "plugins": ["react", "prettier"],
   "rules": {
@@ -25,6 +24,7 @@
     "comma-dangle": "off",
     "indent": "off",
     "prettier/prettier": "error",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "multiline-ternary": "off"
   }
 }

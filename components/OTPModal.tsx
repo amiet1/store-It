@@ -34,15 +34,17 @@ const OtpModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setIsLoading(true);
-    setError("");
 
     try {
-      await verifySecret({ accountId, password });
-      // Close modal (if you use state in parent)
-      // trigger UI refresh to load authenticated components
-      router.refresh();
+      const sessionId = await verifySecret({
+        userId: accountId,
+        otpCode: password,
+      });
+
+      if (sessionId) router.push("/");
     } catch {
       setError("OTP verification failed. Try again.");
     } finally {

@@ -5,14 +5,27 @@ import { Models } from "node-appwrite";
 import Card from "@/components/Card";
 import { getFileTypesParams } from "@/lib/utils";
 
-const Page = async ({ searchParams, params }: SearchParamProps) => {
-  const type = ((await params)?.type as string) || "";
-  const searchText = ((await searchParams)?.query as string) || "";
-  const sort = ((await searchParams)?.sort as string) || "";
+type PageProps = {
+  params: Promise<{ type?: string }>;
+  searchParams?: Promise<{ query?: string; sort?: string }>;
+};
+
+export default async function Page({ params, searchParams }: PageProps) {
+  const type = ((await params)?.type ?? "").toString();
+  const searchText = ((await searchParams)?.query ?? "").toString();
+  const sort = ((await searchParams)?.sort ?? "$createdAt-desc").toString();
 
   const types = getFileTypesParams(type) as FileType[];
 
-  const files = await getFiles({ types, searchText, sort });
+  let files: Awaited<ReturnType<typeof getFiles>> | null = null;
+  try {
+    files = await getFiles({ types, searchText, sort });
+  } catch (err) {
+    console.error("getFiles failed:", err);
+  }
+
+  const total = files?.total ?? 0;
+  const docs = files?.documents ?? [];
 
   return (
     <div className="page-container">
@@ -26,16 +39,14 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
 
           <div className="sort-container">
             <p className="body-1 hidden text-light-200 sm:block">Sort by:</p>
-
             <Sort />
           </div>
         </div>
       </section>
 
-      {/* Render the files */}
-      {files.total > 0 ? (
+      {total > 0 ? (
         <section className="file-list">
-          {files.documents.map((file: Models.Document) => (
+          {docs.map((file: Models.Document) => (
             <Card key={file.$id} file={file} />
           ))}
         </section>
@@ -44,6 +55,4 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
       )}
     </div>
   );
-};
-
-export default Page;
+}

@@ -7,6 +7,7 @@ import { ID, Models, Query } from "node-appwrite";
 import { constructFileUrl, getFileType, parseStringify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/actions/user.actions";
+import { redirect } from "next/navigation";
 
 const handleError = (error: unknown, message: string) => {
   console.log(error, message);
@@ -102,7 +103,9 @@ export const getFiles = async ({
     const currentUser = await getCurrentUser();
     console.log("Current user:", currentUser);
 
-    if (!currentUser) throw new Error("User not found");
+    if (!currentUser) {
+      redirect("/sign-in");
+    }
 
     const queries = createQueries(currentUser, types, searchText, sort, limit);
 
