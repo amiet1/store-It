@@ -88,11 +88,13 @@ const createQueries = (
     );
   }
 
+  console.log({ queries });
+
   return queries;
 };
 
 export const getFiles = async ({
-  types = [],
+  types = [], // to filter multiple types of files
   searchText = "",
   sort = "$createdAt-desc",
   limit,

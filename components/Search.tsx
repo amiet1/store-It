@@ -18,7 +18,8 @@ const Search = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const path = usePathname();
-  const [debouncedQuery] = useDebounce(query, 300);
+  const [debouncedQuery] = useDebounce(query, 300); // only will fire if the user hasn't typed in 300ms
+  // to debounce the search query and prevent unnecessary API calls to db
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -40,19 +41,15 @@ const Search = () => {
     if (!searchQuery) {
       setQuery("");
     }
-  }, [searchQuery]);
+  }, [searchQuery]); // to clear the search query when the search query is empty
 
   const handleClickItem = (file: Models.Document) => {
     setOpen(false);
     setResults([]);
 
-    let route;
-    if (file.type === "video" || file.type === "audio") {
-      route = "media";
-    } else {
-      route = file.type + "s";
-    }
-    router.push(`/${route}?query=${query}`);
+    router.push(
+      `/${file.type === "video" || file.type === "audio" ? "media" : file.type + "s"}?query=${query}`,
+    );
   };
 
   return (
