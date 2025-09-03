@@ -15,7 +15,7 @@ const Sort = () => {
   const router = useRouter();
 
   const handleSort = (value: string) => {
-    router.push(`${path}?sort=${value}`);
+    router.push(`${path}?sort=${value}`); // just modify the queries in url if a sort exists
   };
 
   return (
