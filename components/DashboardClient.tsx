@@ -7,12 +7,12 @@ import { Models } from "node-appwrite";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react";
-import { Chart } from "@/components/Chart";
 import FormattedDateTime from "@/components/FormattedDateTime";
 import Thumbnail from "@/components/Thumbnail";
 import { Separator } from "@/components/ui/separator";
 import ActionDropdown from "@/components/ActionDropdown";
 import { convertFileSize, getUsageSummary } from "@/lib/utils";
+import dynamic from "next/dynamic";
 
 interface TotalSpace {
   used: number;
@@ -27,6 +27,9 @@ interface TotalSpace {
   otherSize?: number;
   otherDate?: string;
 }
+const Chart = dynamic(() => import("@/components/Chart"), {
+  ssr: false,
+});
 
 interface DashboardClientProps {
   files: { documents: Models.Document[] };
