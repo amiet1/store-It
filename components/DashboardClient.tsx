@@ -7,12 +7,14 @@ import { Models } from "node-appwrite";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react";
+import dynamic from "next/dynamic";
 import FormattedDateTime from "@/components/FormattedDateTime";
 import Thumbnail from "@/components/Thumbnail";
 import { Separator } from "@/components/ui/separator";
 import ActionDropdown from "@/components/ActionDropdown";
 import { convertFileSize, getUsageSummary } from "@/lib/utils";
-import dynamic from "next/dynamic";
+
+const Chart = dynamic(() => import("@/components/Chart"), { ssr: false });
 
 interface TotalSpace {
   used: number;
@@ -27,16 +29,16 @@ interface TotalSpace {
   otherSize?: number;
   otherDate?: string;
 }
-const Chart = dynamic(() => import("@/components/Chart"), {
-  ssr: false,
-});
 
 interface DashboardClientProps {
   files: { documents: Models.Document[] };
   totalSpace: TotalSpace;
 }
 
-const DashboardClient = ({ files, totalSpace }: DashboardClientProps) => {
+export default function DashboardClient({
+  files,
+  totalSpace,
+}: DashboardClientProps) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,8 +47,7 @@ const DashboardClient = ({ files, totalSpace }: DashboardClientProps) => {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      const result = e.target?.result as string;
-      setAvatarUrl(result);
+      setAvatarUrl(e.target?.result as string);
       console.log("Avatar changed:", file);
       // TODO: Upload avatar to server
     };
@@ -154,7 +155,7 @@ const DashboardClient = ({ files, totalSpace }: DashboardClientProps) => {
         </ul>
       </section>
 
-      {/* Avatar + Welcome Section (BOTTOM LEFT) */}
+      {/* Avatar + Welcome (bottom left) */}
       <section className="mt-auto flex items-center gap-4">
         <div className="relative">
           <Avatar className="size-16">
@@ -187,6 +188,4 @@ const DashboardClient = ({ files, totalSpace }: DashboardClientProps) => {
       </section>
     </div>
   );
-};
-
-export default DashboardClient;
+}
