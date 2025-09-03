@@ -139,8 +139,10 @@ export const signInUser = async ({ email }: { email: string }) => {
     // User exists, send OTP
     if (existingUser) {
       console.log("User found:", existingUser.$id);
-      await sendEmailOTP({ email });
-      return parseStringify({ accountId: existingUser.accountId });
+      const accountId = await sendEmailOTP({ email });
+      if (!accountId) throw new Error("Failed to send OTP");
+
+      return parseStringify({ accountId });
     }
 
     return parseStringify({ accountId: null, error: "User not found" });
